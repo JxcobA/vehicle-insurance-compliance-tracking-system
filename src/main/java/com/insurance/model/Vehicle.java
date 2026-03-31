@@ -1,22 +1,31 @@
 package com.insurance.model;
 
+import java.time.LocalDate;
+
 public class Vehicle {
 
-    private String regNumber;
+    private final String regNumber; // PK
     private String model;
     private String make;
+    private LocalDate createdAt; // When vehicle is added to the system
 
-    public Vehicle(String regNumber, String model, String make) {
+    public Vehicle(String regNumber, String make, String model, LocalDate createdAt) {
         this.regNumber = regNumber;
-        this.model = model;
         this.make = make;
+        this.model = model;
+        this.createdAt = LocalDate.now();
+
     }
 
     public String getRegNumber() {
         return regNumber;
     }
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
+
+    public String getMake() {
+        return make;
+    }
+    public void setMake(String make) {
+        this.make = make;
     }
 
     public String getModel() {
@@ -26,11 +35,8 @@ public class Vehicle {
         this.model = model;
     }
 
-    public String getMake() {
-        return make;
-    }
-    public void setMake(String make) {
-        this.make = make;
+    public LocalDate getCreatedAt() {
+        return createdAt;
     }
 
 }
