@@ -31,8 +31,7 @@ public class Databaseinitialiser {
                     REFERENCES vehicles(registration_number)
                     ON DELETE CASCADE,
                 CONSTRAINT chk_policy_dates
-                    CHECK (expiry_date >= issue_date),
-                
+                    CHECK (expiry_date >= issue_date)
             );
             """;
 
