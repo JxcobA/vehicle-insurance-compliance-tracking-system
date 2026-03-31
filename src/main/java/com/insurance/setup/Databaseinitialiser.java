@@ -1,6 +1,6 @@
-package setup;
+package com.insurance.setup;
 
-import config.DatabaseConnection;
+import com.insurance.config.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
