@@ -18,7 +18,7 @@ public class InsurancePolicy {
         this.issueDate = issueDate;
         this.expiryDate = expiryDate;
         this.policyType = policyType;
-        this.isActive = true;
+        this.isActive = isActive;
     }
 
 

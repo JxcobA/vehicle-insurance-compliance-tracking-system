@@ -31,7 +31,8 @@ public class Databaseinitialiser {
                     REFERENCES vehicles(registration_number)
                     ON DELETE CASCADE,
                 CONSTRAINT chk_policy_dates
-                    CHECK (expiry_date >= issue_date)
+                    CHECK (expiry_date >= issue_date),
+                
             );
             """;
 
@@ -52,6 +53,10 @@ public class Databaseinitialiser {
             """;
 
         String createIndexes = """
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_active_policy_per_vehicle
+            ON insurance_policies(registration_number)
+            WHERE is_active = TRUE;
+            
             CREATE INDEX IF NOT EXISTS idx_policy_registration
             ON insurance_policies(registration_number);
 
