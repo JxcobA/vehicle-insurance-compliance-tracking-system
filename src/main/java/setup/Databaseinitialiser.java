@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DatabaseInitializer {
+public class Databaseinitialiser {
 
-    public static void initializeDatabase() {
+    public static void initialiseDatabase() {
         String createVehiclesTable = """
             CREATE TABLE IF NOT EXISTS vehicles (
                 registration_number VARCHAR(20) PRIMARY KEY,
