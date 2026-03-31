@@ -8,4 +8,5 @@ public class InsurancePolicy {
     private String regNumber;
     private LocalDate issueDate;
 
+
 }
