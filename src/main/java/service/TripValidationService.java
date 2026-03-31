@@ -28,10 +28,17 @@ public class TripValidationService {
         }
 
         if (lastEvent.getEvent_type().equals("TRIP_START") && newEventType.equals("TRIP_END")){
-
+            throw new IllegalArgumentException("Cannot record consecutive TRIP_START event");
         }
 
+    }
 
+    public boolean canStartTrip(Trips lastEvent){
+        return lastEvent == null || lastEvent.getEvent_type().equals("TRIP_END");
+    }
+
+    public boolean canEndTrip(Trips lastEvent){
+        return lastEvent != null && lastEvent.getEvent_type().equals("TRIP_START");
 
     }
 
