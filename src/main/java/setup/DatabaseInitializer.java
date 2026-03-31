@@ -22,7 +22,6 @@ public class DatabaseInitializer {
             CREATE TABLE IF NOT EXISTS insurance_policies (
                 id SERIAL PRIMARY KEY,
                 registration_number VARCHAR(20) NOT NULL,
-                policy_number VARCHAR(50) UNIQUE NOT NULL,
                 policy_type VARCHAR(30) NOT NULL,
                 issue_date DATE NOT NULL,
                 expiry_date DATE NOT NULL,
