@@ -3,6 +3,7 @@ import com.insurance.setup.Databaseinitialiser;
 import com.insurance.dao.VehicleDAO;
 public class Main {
     public static void main(String[] args) {
+        Databaseinitialiser.initialiseDatabase();
         VehicleDAO dao = new VehicleDAO();
 
 

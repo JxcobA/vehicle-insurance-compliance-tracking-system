@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Trips {
 
-
+    private int id;
     private String regNumber;
     private String event_type;
     private LocalDateTime event_timestamp;
@@ -12,7 +12,8 @@ public class Trips {
 
 
 
-    public Trips(String regNumber, String event_type, LocalDateTime event_timestamp, String location) {
+    public Trips(Integer id, String regNumber, String event_type, LocalDateTime event_timestamp, String location) {
+        this.id = id;
         this.regNumber = regNumber;
         this.event_type = event_type;
         this.event_timestamp = event_timestamp;
