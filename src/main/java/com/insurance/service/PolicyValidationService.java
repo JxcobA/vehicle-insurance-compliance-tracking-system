@@ -1,4 +1,4 @@
-package service;
+package com.insurance.service;
 
 import com.insurance.model.InsurancePolicy;
 

@@ -1,4 +1,4 @@
-import setup.Databaseinitialiser;
+import com.insurance.setup.Databaseinitialiser;
 
 public class Main {
     public static void main(String[] args) {
