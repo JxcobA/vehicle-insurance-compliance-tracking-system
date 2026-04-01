@@ -7,13 +7,12 @@ public class Vehicle {
     private final String regNumber; // PK
     private String model;
     private String make;
-    private LocalDate createdAt; // When vehicle is added to the system
 
-    public Vehicle(String regNumber, String make, String model, LocalDate createdAt) {
+
+    public Vehicle(String regNumber, String make, String model) {
         this.regNumber = regNumber;
         this.make = make;
         this.model = model;
-        this.createdAt = LocalDate.now();
 
     }
 
@@ -35,8 +34,16 @@ public class Vehicle {
         this.model = model;
     }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
+    public void PrintVehicleInfo(Vehicle v){
+        if (v != null) {
+            System.out.println("Registration: " + v.getRegNumber());
+            System.out.println("Make: " + v.getMake());
+            System.out.println("Model: " + v.getModel());
+        } else {
+            System.out.println("Vehicle not found.");
+        }
     }
+
+
 
 }

@@ -13,8 +13,7 @@ public class Databaseinitialiser {
             CREATE TABLE IF NOT EXISTS vehicles (
                 registration_number VARCHAR(20) PRIMARY KEY,
                 make VARCHAR(50),
-                model VARCHAR(50),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                model VARCHAR(50)
             );
             """;
 
