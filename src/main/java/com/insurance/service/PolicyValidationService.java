@@ -10,10 +10,6 @@ public class PolicyValidationService {
             throw new IllegalArgumentException("Policy cannot be null");
         }
 
-        if (policy.getPolicyId() <= 0) {
-            throw new IllegalArgumentException("Policy ID must be greater than 0");
-        }
-
         if (policy.getRegNumber() == null || policy.getRegNumber().isBlank()) {
             throw new IllegalArgumentException("Registration number cannot be null or empty");
         }

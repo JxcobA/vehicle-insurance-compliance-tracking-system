@@ -3,17 +3,15 @@ package com.insurance.model;
 import java.time.LocalDate;
 
 public class InsurancePolicy {
-
-    private int policyId; // PK
-    private String regNumber; // FK
+    private int id;
+    private String regNumber;
     private LocalDate issueDate;
     private LocalDate expiryDate;
     private String policyType;
     private boolean isActive;
 
 
-    public InsurancePolicy(int policyId, String regNumber, LocalDate issueDate, LocalDate expiryDate, String policyType, boolean isActive) {
-        this.policyId = policyId;
+    public InsurancePolicy(String regNumber, LocalDate issueDate, LocalDate expiryDate, String policyType, boolean isActive) {
         this.regNumber = regNumber;
         this.issueDate = issueDate;
         this.expiryDate = expiryDate;
@@ -22,11 +20,11 @@ public class InsurancePolicy {
     }
 
 
-    public int getPolicyId() {
-        return policyId;
+    public int getId() {
+        return id;
     }
-    public void setPolicyId(int policyId) {
-        this.policyId = policyId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRegNumber() {

@@ -19,7 +19,7 @@ public class Databaseinitialiser {
 
         String createPoliciesTable = """
             CREATE TABLE IF NOT EXISTS insurance_policies (
-                id SERIAL PRIMARY KEY,
+                id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 registration_number VARCHAR(20) NOT NULL,
                 policy_type VARCHAR(30) NOT NULL,
                 issue_date DATE NOT NULL,
