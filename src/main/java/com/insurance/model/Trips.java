@@ -10,8 +10,7 @@ public class Trips {
     private LocalDateTime event_timestamp;
     private String location;
 
-    public Trips() {
-    }
+
 
     public Trips(String regNumber, String event_type, LocalDateTime event_timestamp, String location) {
         this.regNumber = regNumber;
