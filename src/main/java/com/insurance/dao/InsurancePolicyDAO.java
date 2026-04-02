@@ -2,6 +2,8 @@ package com.insurance.dao;
 
 import com.insurance.model.InsurancePolicy;
 import com.insurance.config.DatabaseConnection;
+import com.insurance.service.PolicyValidationService;
+
 import java.sql.*;
 
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ public class InsurancePolicyDAO {
 
     // Create: Insert a new insurance policy
     public void createPolicy(InsurancePolicy insurancePolicy) throws SQLException {
+        new PolicyValidationService().validatePolicy(insurancePolicy);
 
         String sql = """
                 INSERT INTO insurance_policies
@@ -48,13 +51,15 @@ public class InsurancePolicyDAO {
             ResultSet rs = ps.executeQuery(); // ResultSet rs: An object that represents the data returned from the sql query
 
             if (rs.next()) { // Moves cursor to next line
-                return new InsurancePolicy(
+                InsurancePolicy policy = new InsurancePolicy(
                         rs.getString("registration_number"),
                         rs.getDate("issue_date").toLocalDate(),
                         rs.getDate("expiry_date").toLocalDate(),
                         rs.getString("policy_type"),
                         rs.getBoolean("is_active")
                 );
+                policy.setId(rs.getInt("id"));
+                return policy;
             }
         }
         return null;
@@ -75,6 +80,7 @@ public class InsurancePolicyDAO {
         }
 
     }
+
 
 
 

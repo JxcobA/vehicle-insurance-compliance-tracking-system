@@ -48,6 +48,7 @@ public class Trips {
         this.location = location;
     }
 
-
-
+    public int getId() {
+        return id;
+    }
 }

@@ -27,8 +27,12 @@ public class TripValidationService {
             throw new IllegalArgumentException("New event timestamp cannot be before last recorded event");
         }
 
-        if (lastEvent.getEvent_type().equals("TRIP_START") && newEventType.equals("TRIP_END")){
+        if (lastEvent.getEvent_type().equals("TRIP_START") && newEventType.equals("TRIP_START")){
             throw new IllegalArgumentException("Cannot record consecutive TRIP_START event");
+        }
+
+        if (lastEvent.getEvent_type().equals("TRIP_END") && newEventType.equals("TRIP_END")){
+            throw new IllegalArgumentException("Cannot record consecutive TRIP_END event");
         }
 
     }

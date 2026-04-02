@@ -34,16 +34,21 @@ public class Vehicle {
         this.model = model;
     }
 
-    public void PrintVehicleInfo(Vehicle v){
-        if (v != null) {
-            System.out.println("Registration: " + v.getRegNumber());
-            System.out.println("Make: " + v.getMake());
-            System.out.println("Model: " + v.getModel());
-        } else {
-            System.out.println("Vehicle not found.");
-        }
+//    public void PrintVehicleInfo(Vehicle v){
+//        if (v != null) {
+//            System.out.println("Registration: " + v.getRegNumber());
+//            System.out.println("Make: " + v.getMake());
+//            System.out.println("Model: " + v.getModel());
+//        } else {
+//            System.out.println("Vehicle not found.");
+//        }
+//    }
+
+    // Implemented the above as a toString override
+
+
+    @Override
+    public String toString() {
+        return "Vehicle: " + make + " " + model + "\nRegistration: " + regNumber;
     }
-
-
-
 }

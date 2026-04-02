@@ -2,6 +2,7 @@ package com.insurance.dao;
 
 import com.insurance.model.Trips;
 import com.insurance.config.DatabaseConnection;
+import com.insurance.service.TripValidationService;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -35,7 +36,36 @@ public class TripsDAO {
     };
 
 
+    // Get the last trip, used to validate whether next trip is valid
+    public Trips getLastTripEvent(String reg) {
+        String sql = "SELECT * FROM trip_events WHERE registration_number = ? ORDER BY event_timestamp DESC LIMIT 1";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, reg);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Trips(
+                        rs.getInt("id"),
+                        rs.getString("registration_number"),
+                        rs.getString("event_type"),
+                        rs.getTimestamp("event_timestamp").toLocalDateTime(),
+                        rs.getString("location")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public Trips insertTrip(String reg, String eventType, LocalDateTime timestamp, String location) {
+
+        Trips lastEvent = getLastTripEvent(reg);
+        TripValidationService validator = new TripValidationService();
+        validator.validateTrips(lastEvent, eventType, timestamp);
 
         String sql = "INSERT INTO trip_events (registration_number, event_type, event_timestamp, location) " +
                 "VALUES (?, ?, ?, ?)";
@@ -51,12 +81,10 @@ public class TripsDAO {
             int rowsInserted = stmt.executeUpdate();
 
             if (rowsInserted > 0) {
-
                 // Get auto-generated ID
                 ResultSet keys = stmt.getGeneratedKeys();
                 if (keys.next()) {
                     int id = keys.getInt(1);
-
                     return new Trips(
                             id,
                             reg,
@@ -66,11 +94,9 @@ public class TripsDAO {
                     );
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
