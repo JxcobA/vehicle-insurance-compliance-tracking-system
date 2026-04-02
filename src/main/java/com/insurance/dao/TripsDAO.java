@@ -34,6 +34,7 @@ public class TripsDAO {
     return trips;
     };
 
+
     public Trips insertTrip(String reg, String eventType, LocalDateTime timestamp, String location) {
 
         String sql = "INSERT INTO trip_events (registration_number, event_type, event_timestamp, location) " +
