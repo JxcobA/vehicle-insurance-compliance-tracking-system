@@ -1,36 +1,37 @@
 package com.insurance.dao;
 
-import com.insurance.model.Vehicle;
 import com.insurance.model.Trips;
 import com.insurance.config.DatabaseConnection;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripsDAO {
 
-    public Trips getTripsofVehicle(String reg){
-        String sql = "SELECT * FROM trip_events WHERE registration_number = ?";
+    public List<Trips> getTripsOfVehicle(String reg){
+        String sql = "SELECT * FROM trip_events WHERE registration_number = ? ORDER BY event_timestamp ASC";
+        List<Trips> trips = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, reg);
-
             ResultSet rs = stmt.executeQuery();
 
-            if ( rs.next()) {
-                return new Trips(
+            while (rs.next()) {
+                trips.add(new Trips(
                         rs.getInt("id"),
                         rs.getString("registration_number"),
                         rs.getString("event_type"),
                         rs.getTimestamp("event_timestamp").toLocalDateTime(),
                         rs.getString("location")
-                                );
+                ));
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
-    return null;
+    return trips;
     };
 
     public Trips insertTrip(String reg, String eventType, LocalDateTime timestamp, String location) {
