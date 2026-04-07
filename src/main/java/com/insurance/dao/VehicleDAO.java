@@ -4,6 +4,8 @@ import com.insurance.model.Vehicle;
 import com.insurance.config.DatabaseConnection;
 
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class VehicleDAO {
     public Vehicle getVehicleByReg(String reg) {
@@ -91,5 +93,29 @@ public class VehicleDAO {
 
         return null;
     }
+
+    public List<Vehicle> getAllVehicles() {
+        String sql = "SELECT * FROM vehicles";
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                vehicles.add(new Vehicle(
+                        rs.getString("registration_number"),
+                        rs.getString("make"),
+                        rs.getString("model")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vehicles;
+    }
+
 
 }

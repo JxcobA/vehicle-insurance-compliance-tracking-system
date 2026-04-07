@@ -120,4 +120,66 @@ public class TripsDAO {
         return false;
     }
 
+    public Trips getLastTripStart(String reg) {
+        String sql = """
+        SELECT * FROM trip_events
+        WHERE registration_number = ?
+          AND event_type = 'TRIP_START'
+        ORDER BY event_timestamp DESC
+        LIMIT 1
+    """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, reg);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Trips(
+                        rs.getInt("id"),
+                        rs.getString("registration_number"),
+                        rs.getString("event_type"),
+                        rs.getTimestamp("event_timestamp").toLocalDateTime(),
+                        rs.getString("location")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Trips getLastTripEnd(String reg) {
+        String sql = """
+        SELECT * FROM trip_events
+        WHERE registration_number = ?
+          AND event_type = 'TRIP_END'
+        ORDER BY event_timestamp DESC
+        LIMIT 1
+    """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, reg);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Trips(
+                        rs.getInt("id"),
+                        rs.getString("registration_number"),
+                        rs.getString("event_type"),
+                        rs.getTimestamp("event_timestamp").toLocalDateTime(),
+                        rs.getString("location")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }
