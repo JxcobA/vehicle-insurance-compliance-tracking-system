@@ -1,5 +1,6 @@
 package com.insurance.service;
 
+import com.insurance.exceptions.PolicyValidationException;
 import com.insurance.model.InsurancePolicy;
 
 public class PolicyValidationService {
@@ -7,23 +8,23 @@ public class PolicyValidationService {
     public void validatePolicy(InsurancePolicy policy) {
 
         if (policy == null) {
-            throw new IllegalArgumentException("Policy cannot be null");
+            throw new PolicyValidationException("Policy cannot be null");
         }
 
         if (policy.getRegNumber() == null || policy.getRegNumber().isBlank()) {
-            throw new IllegalArgumentException("Registration number cannot be null or empty");
+            throw new PolicyValidationException("Registration number cannot be null or empty");
         }
 
         if (policy.getPolicyType() == null || policy.getPolicyType().isBlank()) {
-            throw new IllegalArgumentException("Policy type cannot be null or empty");
+            throw new PolicyValidationException("Policy type cannot be null or empty");
         }
 
         if (policy.getIssueDate() == null || policy.getExpiryDate() == null) {
-            throw new IllegalArgumentException("Issue and expiry dates are required");
+            throw new PolicyValidationException("Issue and expiry dates are required");
         }
 
         if (!policy.getExpiryDate().isAfter(policy.getIssueDate())) {
-            throw new IllegalArgumentException("Expiry date must be after issue date");
+            throw new PolicyValidationException("Expiry date must be after issue date");
         }
 
     }

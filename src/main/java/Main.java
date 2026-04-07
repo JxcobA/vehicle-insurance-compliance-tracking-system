@@ -5,6 +5,7 @@ import com.insurance.model.Trips;
 import com.insurance.model.Vehicle;
 import com.insurance.setup.Databaseinitialiser;
 import com.insurance.dao.VehicleDAO;
+import com.insurance.exceptions.TripSequenceException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -93,11 +94,11 @@ public class Main {
             } else {
                 System.out.println("Trip start skipped: a trip is already in progress.");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (TripSequenceException e) {
             System.out.println("Trip start skipped: " + e.getMessage());
         }
 
-// Create trip end:
+        // Create trip end:
         try {
             Trips lastEvent = tripsDAO.getLastTripEvent("RGF3 YNX");
             if (lastEvent != null && lastEvent.getEvent_type().equals("TRIP_START")) {
@@ -106,7 +107,7 @@ public class Main {
             } else {
                 System.out.println("Trip end skipped: no active trip to end.");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (TripSequenceException e) {
             System.out.println("Trip end skipped: " + e.getMessage());
         }
 
