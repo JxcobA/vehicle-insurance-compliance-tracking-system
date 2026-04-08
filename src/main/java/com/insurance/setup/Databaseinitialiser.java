@@ -83,5 +83,22 @@ public class Databaseinitialiser {
             e.printStackTrace();
         }
     }
+
+    // Clear data from DB
+    public static void resetData() {
+
+        String sql = """
+                    TRUNCATE TABLE trip_events RESTART IDENTITY CASCADE;
+                    TRUNCATE TABLE insurance_policies RESTART IDENTITY CASCADE;
+                """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+            System.out.println("Data reset successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error resetting data: " + e.getMessage());
+        }
+    }
 }
 
