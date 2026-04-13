@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TripsDAO {
+public class TripsDAO extends BaseDAO {
 
     public List<Trips> getTripsOfVehicle(String reg){
         String sql = "SELECT * FROM trip_events WHERE registration_number = ? ORDER BY event_timestamp ASC";
         List<Trips> trips = new ArrayList<>();
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, reg);
             ResultSet rs = stmt.executeQuery();
@@ -30,7 +30,7 @@ public class TripsDAO {
                 ));
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            handleSQLException(e);
         }
     return trips;
     };
@@ -55,7 +55,7 @@ public class TripsDAO {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
         return null;
     }
@@ -95,7 +95,7 @@ public class TripsDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
         return null;
     }
@@ -114,7 +114,7 @@ public class TripsDAO {
             return rowsDeleted > 0; // true if deleted, false if not found
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return false;
@@ -145,7 +145,7 @@ public class TripsDAO {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return null;
@@ -176,7 +176,7 @@ public class TripsDAO {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return null;

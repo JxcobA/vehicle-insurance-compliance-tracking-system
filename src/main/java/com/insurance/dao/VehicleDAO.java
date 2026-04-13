@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class VehicleDAO {
+public class VehicleDAO extends BaseDAO {
     public Vehicle getVehicleByReg(String reg) {
         String sql = "SELECT * FROM vehicles WHERE registration_number = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, reg);
 
@@ -27,7 +27,7 @@ public class VehicleDAO {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return null;
@@ -57,7 +57,7 @@ public class VehicleDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return null;
@@ -88,7 +88,7 @@ public class VehicleDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return null;
@@ -111,7 +111,7 @@ public class VehicleDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
         return vehicles;

@@ -88,9 +88,10 @@ public class Databaseinitialiser {
     public static void resetData() {
 
         String sql = """
-                    TRUNCATE TABLE trip_events RESTART IDENTITY CASCADE;
-                    TRUNCATE TABLE insurance_policies RESTART IDENTITY CASCADE;
-                """;
+            TRUNCATE TABLE trip_events RESTART IDENTITY CASCADE;
+            TRUNCATE TABLE insurance_policies RESTART IDENTITY CASCADE;
+            TRUNCATE TABLE vehicles RESTART IDENTITY CASCADE;
+        """;
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement()) {

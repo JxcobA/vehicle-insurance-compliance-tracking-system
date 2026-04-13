@@ -1,5 +1,6 @@
 package ValidationServiceTests;
 
+import com.insurance.exceptions.TripSequenceException;
 import com.insurance.model.Trips;
 import com.insurance.service.TripValidationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ public class TripValidationServiceTest {
 
     @Test
     void shouldThrowWhenEndingWithNoHistory() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(TripSequenceException.class, () ->
                 validator.validateTrips(null, "TRIP_END", baseTime));
     }
 
@@ -36,7 +37,7 @@ public class TripValidationServiceTest {
     void shouldThrowOnConsecutiveTripEnds() {
         Trips lastEvent = new Trips(1, "RGF3 YNX", "TRIP_END", baseTime, "Oxford");
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(TripSequenceException.class, () ->
                 validator.validateTrips(lastEvent, "TRIP_END", baseTime.plusHours(2)));
     }
 
@@ -44,7 +45,7 @@ public class TripValidationServiceTest {
     void shouldThrowWhenTimestampIsBeforeLastEvent() {
         Trips lastEvent = new Trips(1, "RGF3 YNX", "TRIP_END", baseTime, "Basingstoke");
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(TripSequenceException.class, () ->
                 validator.validateTrips(lastEvent, "TRIP_END", baseTime.minusHours(1)));
     }
 
