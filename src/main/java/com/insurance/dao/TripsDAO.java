@@ -40,7 +40,7 @@ public class TripsDAO extends BaseDAO {
     public Trips getLastTripEvent(String reg) {
         String sql = "SELECT * FROM trip_events WHERE registration_number = ? ORDER BY event_timestamp DESC LIMIT 1";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, reg);
             ResultSet rs = stmt.executeQuery();
@@ -70,7 +70,7 @@ public class TripsDAO extends BaseDAO {
         String sql = "INSERT INTO trip_events (registration_number, event_type, event_timestamp, location) " +
                 "VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, reg);
@@ -104,7 +104,7 @@ public class TripsDAO extends BaseDAO {
 
         String sql = "DELETE FROM trip_events WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -129,7 +129,7 @@ public class TripsDAO extends BaseDAO {
         LIMIT 1
     """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, reg);
@@ -160,7 +160,7 @@ public class TripsDAO extends BaseDAO {
         LIMIT 1
     """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, reg);

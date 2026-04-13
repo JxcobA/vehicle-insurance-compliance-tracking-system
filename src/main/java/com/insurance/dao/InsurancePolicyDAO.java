@@ -45,7 +45,7 @@ public class InsurancePolicyDAO extends BaseDAO{
                 AND is_active = TRUE
                 """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, regNumber);
             ResultSet rs = ps.executeQuery(); // ResultSet rs: An object that represents the data returned from the sql query
@@ -73,7 +73,7 @@ public class InsurancePolicyDAO extends BaseDAO{
                 WHERE id = ?
                 """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, policyId);
             ps.executeUpdate();

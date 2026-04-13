@@ -43,7 +43,7 @@ public class VehicleDAO extends BaseDAO {
 
         String sql = "INSERT INTO vehicles (registration_number, make, model) VALUES (?, ?, ?)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, reg);
@@ -75,7 +75,7 @@ public class VehicleDAO extends BaseDAO {
 
         String sql = "DELETE FROM vehicles WHERE registration_number = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, reg);
@@ -98,7 +98,7 @@ public class VehicleDAO extends BaseDAO {
         String sql = "SELECT * FROM vehicles";
         List<Vehicle> vehicles = new ArrayList<>();
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 

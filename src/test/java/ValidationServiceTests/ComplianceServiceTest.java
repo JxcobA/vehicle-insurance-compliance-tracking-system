@@ -25,8 +25,6 @@ public class ComplianceServiceTest {
     private ComplianceService complianceService;
     private VehicleDAO vehicleDAO;
 
-    private final String regNumber = "RGF3 YNX";
-    private final LocalDate expiry = LocalDate.of(2026, 6, 1);
 
     @BeforeEach
     void setUp() {

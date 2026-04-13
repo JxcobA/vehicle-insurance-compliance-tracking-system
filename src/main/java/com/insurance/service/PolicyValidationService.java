@@ -3,7 +3,12 @@ package com.insurance.service;
 import com.insurance.exceptions.PolicyValidationException;
 import com.insurance.model.InsurancePolicy;
 
-public class PolicyValidationService {
+public class PolicyValidationService implements Validatable<InsurancePolicy> {
+
+    @Override
+    public void validate(InsurancePolicy policy) {
+        validatePolicy(policy);
+    }
 
     public void validatePolicy(InsurancePolicy policy) {
 
@@ -26,6 +31,5 @@ public class PolicyValidationService {
         if (!policy.getExpiryDate().isAfter(policy.getIssueDate())) {
             throw new PolicyValidationException("Expiry date must be after issue date");
         }
-
     }
 }
