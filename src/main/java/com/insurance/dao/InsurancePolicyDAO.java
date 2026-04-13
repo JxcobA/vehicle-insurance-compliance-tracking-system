@@ -8,7 +8,7 @@ import java.sql.*;
 
 import java.sql.SQLException;
 
-public class InsurancePolicyDAO {
+public class InsurancePolicyDAO extends BaseDAO{
 
     // Create: Insert a new insurance policy
     public void createPolicy(InsurancePolicy insurancePolicy) throws SQLException {
@@ -20,7 +20,7 @@ public class InsurancePolicyDAO {
                 VALUES (?, ?, ?, ?, ?)
                 """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, insurancePolicy.getRegNumber());
