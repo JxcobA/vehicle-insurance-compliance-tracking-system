@@ -18,6 +18,7 @@ public class ComplianceService {
         try {
             InsurancePolicy policy = policyDAO.getActivePolicy(regNumber);
 
+            // If no active policy found - return null
             if (policy == null) {
                 return false;
             }
@@ -25,6 +26,7 @@ public class ComplianceService {
             LocalDate expiry = policy.getExpiryDate();
             LocalDate today = LocalDate.now();
 
+            // If policy exists but has not yet expired - return null
             if (expiry.isAfter(today)) {
                 return false;
             }
@@ -32,17 +34,22 @@ public class ComplianceService {
             Trips lastTripStart = tripsDAO.getLastTripStart(regNumber);
             Trips lastTripEnd = tripsDAO.getLastTripEnd(regNumber);
 
+            // If policy has expired, but no trip has started - return null
             if (lastTripStart == null) {
                 return false;
             }
 
+            // If policy has expired, a trip has started but not ended, and trip start is after expiry - violation
+            // i.e. No trip end recorded — violation if trip start is after expiry
             if (lastTripEnd == null) {
                 return lastTripStart.getEvent_timestamp().toLocalDate().isAfter(expiry);
             }
 
+            // If policy has expired and trip start is after trip end - startAfterEnd = true
             boolean startAfterEnd =
                     lastTripStart.getEvent_timestamp().isAfter(lastTripEnd.getEvent_timestamp());
 
+            // If policy has expired and trip start is after expiry - startAfterExpiry = true
             boolean startAfterExpiry =
                     lastTripStart.getEvent_timestamp().toLocalDate().isAfter(expiry);
 
