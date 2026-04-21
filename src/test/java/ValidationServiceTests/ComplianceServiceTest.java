@@ -5,6 +5,7 @@ import com.insurance.dao.TripsDAO;
 import com.insurance.dao.VehicleDAO;
 import com.insurance.model.InsurancePolicy;
 import com.insurance.model.Trips;
+import com.insurance.model.Vehicle;
 import com.insurance.model.ViolationRecord;
 import com.insurance.service.ComplianceService;
 import com.insurance.setup.Databaseinitialiser;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -156,4 +158,77 @@ public class ComplianceServiceTest {
         ViolationRecord result = complianceService.getViolationRecord("TEST1");
         assertNull(result);
     }
+
+    @Test
+    void shouldReturnAllVehicles() {
+        List<Vehicle> vehicles = vehicleDAO.getAllVehicles();
+        assertNotNull(vehicles);
+        assertEquals(1, vehicles.size());
+    }
+
+    @Test
+    void shouldDeleteVehicleByReg() {
+        Vehicle vehicle = vehicleDAO.deleteByReg("TEST1");
+        assertNotNull(vehicle);
+        assertNull(vehicleDAO.getVehicleByReg("TEST1"));
+    }
+
+    @Test
+    void shouldReturnNullWhenDeletingNonExistentVehicle() {
+        Vehicle vehicle = vehicleDAO.deleteByReg("NONEXISTENT");
+        assertNull(vehicle);
+    }
+
+
+    @Test
+    void isVehicleViolating_shouldReturnFalseIfNoPolicy() {
+        assertFalse(complianceService.isVehicleViolating("TEST1"));
+    }
+
+    @Test
+    void isVehicleViolating_shouldReturnFalseIfPolicyNotExpired() throws SQLException {
+        policyDAO.createPolicy(new InsurancePolicy(
+                "TEST1", LocalDate.of(2026, 1, 1), LocalDate.of(2027, 1, 1), "COMPREHENSIVE", true
+        ));
+        assertFalse(complianceService.isVehicleViolating("TEST1"));
+    }
+
+    @Test
+    void isVehicleViolating_shouldReturnFalseIfExpiredButNoTrips() throws SQLException {
+        policyDAO.createPolicy(new InsurancePolicy(
+                "TEST1", LocalDate.of(2024, 1, 1), LocalDate.of(2025, 1, 1), "COMPREHENSIVE", true
+        ));
+        assertFalse(complianceService.isVehicleViolating("TEST1"));
+    }
+
+    @Test
+    void isVehicleViolating_shouldReturnTrueForViolation() throws SQLException {
+        policyDAO.createPolicy(new InsurancePolicy(
+                "TEST1", LocalDate.of(2024, 1, 1), LocalDate.of(2025, 1, 1), "COMPREHENSIVE", true
+        ));
+        tripsDAO.insertTrip("TEST1", "TRIP_START", LocalDateTime.of(2025, 3, 1, 10, 0), "Reading");
+        assertTrue(complianceService.isVehicleViolating("TEST1"));
+    }
+
+    @Test
+    void isVehicleViolating_shouldReturnTrueWhenStartAfterEndAfterExpiry() throws SQLException {
+        policyDAO.createPolicy(new InsurancePolicy(
+                "TEST1", LocalDate.of(2023, 1, 1), LocalDate.of(2024, 1, 1), "COMPREHENSIVE", true
+        ));
+        tripsDAO.insertTrip("TEST1", "TRIP_START", LocalDateTime.of(2023, 6, 1, 9, 0), "Bath");
+        tripsDAO.insertTrip("TEST1", "TRIP_END",   LocalDateTime.of(2023, 6, 1, 12, 0), "Bath");
+        tripsDAO.insertTrip("TEST1", "TRIP_START", LocalDateTime.of(2025, 1, 5, 10, 0), "Reading");
+        assertTrue(complianceService.isVehicleViolating("TEST1"));
+    }
+
+    @Test
+    void isVehicleViolating_shouldReturnFalseWhenTripEndedBeforeExpiry() throws SQLException {
+        policyDAO.createPolicy(new InsurancePolicy(
+                "TEST1", LocalDate.of(2024, 1, 1), LocalDate.of(2025, 1, 1), "COMPREHENSIVE", true
+        ));
+        tripsDAO.insertTrip("TEST1", "TRIP_START", LocalDateTime.of(2024, 6, 1, 9, 0), "Bath");
+        tripsDAO.insertTrip("TEST1", "TRIP_END",   LocalDateTime.of(2024, 6, 1, 12, 0), "Bath");
+        assertFalse(complianceService.isVehicleViolating("TEST1"));
+    }
+
 }

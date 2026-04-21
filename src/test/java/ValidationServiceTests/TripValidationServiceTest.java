@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TripValidationServiceTest {
 
@@ -55,6 +54,66 @@ public class TripValidationServiceTest {
         Trips lastEvent = new Trips(1, "RGF3 YNX", "TRIP_END", baseTime, "Southampton");
 
         assertDoesNotThrow(() -> validator.validateTrips(lastEvent, "TRIP_START", baseTime.plusHours(1)));
+    }
+
+
+    @Test
+    void canStartTrip_shouldReturnTrueWhenNoHistory() {
+        assertTrue(validator.canStartTrip(null));
+    }
+
+    @Test
+    void canStartTrip_shouldReturnTrueAfterTripEnd() {
+        Trips lastEvent = new Trips(1, "TEST1", "TRIP_END", baseTime, "Reading");
+        assertTrue(validator.canStartTrip(lastEvent));
+    }
+
+    @Test
+    void canStartTrip_shouldReturnFalseWhenTripInProgress() {
+        Trips lastEvent = new Trips(1, "TEST1", "TRIP_START", baseTime, "Reading");
+        assertFalse(validator.canStartTrip(lastEvent));
+    }
+
+    @Test
+    void canEndTrip_shouldReturnTrueWhenTripInProgress() {
+        Trips lastEvent = new Trips(1, "TEST1", "TRIP_START", baseTime, "Reading");
+        assertTrue(validator.canEndTrip(lastEvent));
+    }
+
+    @Test
+    void canEndTrip_shouldReturnFalseWhenNoHistory() {
+        assertFalse(validator.canEndTrip(null));
+    }
+
+    @Test
+    void canEndTrip_shouldReturnFalseAfterTripEnd() {
+        Trips lastEvent = new Trips(1, "TEST1", "TRIP_END", baseTime, "Reading");
+        assertFalse(validator.canEndTrip(lastEvent));
+    }
+
+    @Test
+    void shouldThrowOnConsecutiveTripStarts() {
+        Trips lastEvent = new Trips(1, "TEST1", "TRIP_START", baseTime, "Reading");
+        assertThrows(TripSequenceException.class, () ->
+                validator.validateTrips(lastEvent, "TRIP_START", baseTime.plusHours(1)));
+    }
+
+    @Test
+    void shouldThrowWhenEventTypeIsNull() {
+        assertThrows(TripSequenceException.class, () ->
+                validator.validateTrips(null, null, baseTime));
+    }
+
+    @Test
+    void shouldThrowWhenEventTypeIsInvalid() {
+        assertThrows(TripSequenceException.class, () ->
+                validator.validateTrips(null, "INVALID_TYPE", baseTime));
+    }
+
+    @Test
+    void shouldThrowWhenTimestampIsNull() {
+        assertThrows(TripSequenceException.class, () ->
+                validator.validateTrips(null, "TRIP_START", null));
     }
 
 }
